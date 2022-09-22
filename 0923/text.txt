@@ -1,0 +1,3 @@
+The token descriptions that lex uses are known as regular expressions, extended
+versions of the familiar patterns used by the grep and egrep commands. A lex lexer is
+almost always faster than a lexer that you might write in C by hand.
