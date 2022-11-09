@@ -1,0 +1,14 @@
+11.01
+have to code printTable function in hw_table.c
+think about enum type print...
+======================================================================
+11.09
+summerized TODO at NOTION page
+understood what the assignment wants
+please check the textbook, and then get on this assignment
+
+TODO understand where is the right position of each type functions
+TODO understand where to add blockBegin, blockEnd functions
+TODO serch and implement enum printing
+TODO implement searchT printTable functions
+======================================================================
