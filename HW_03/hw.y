@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "hw_table.h"
 #define FIRSTADDR 0
+#define DEFAULT 1
 
 %}
 
@@ -47,18 +48,18 @@ numberList	: IDENT EQ NUMBER		{ enterTconst($1, $3); }
 varDecl	: VAR identList ';'
 		;
 		
-identList	: IDENT 			{ }
-		| identList COMMA IDENT	{ }
+identList	: IDENT 			{ enterTvar($1); }
+		| identList COMMA IDENT	{ enterTvar($3); }
 		;
 
 optParList	: /* empty */
 		| parList
 		;
-parList        : IDENT 			{ }
-		| parList COMMA IDENT	{ }
+parList        : IDENT 			{ enterTpar($1); }
+		| parList COMMA IDENT	{ enterTpar($3); increase_pars(); }
 		;
 
-funcDecl	: FUNCTION IDENT   	{ }
+funcDecl	: FUNCTION IDENT   	{ enterTfunc($2, DEFAULT ); blockBegin(FIRSTADDR); }
                   '('  optParList ')' 	{ } 
 			block ';'
 		;
@@ -136,7 +137,7 @@ yyerror(char* s) {
 
 main(){ 
   yyparse();
-  if (noError) {
+  if (noError) { 
     printTable();
   }
 }
