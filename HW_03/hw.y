@@ -59,14 +59,14 @@ parList        : IDENT 			{ enterTpar($1); }
 		| parList COMMA IDENT	{ enterTpar($3); increase_pars(); }
 		;
 
-funcDecl	: FUNCTION IDENT   	{ enterTfunc($2, DEFAULT ); blockBegin(FIRSTADDR); }
+funcDecl	: FUNCTION IDENT   	{ set_areaNumber2(); enterTfunc($2, DEFAULT ); blockBegin(FIRSTADDR); }
                   '('  optParList ')' 	{ } 
-			block ';'
+			block ';'       { set_areaNumber1(); }
 		;
 
 statement	: /* empty */
 		| IDENT COLOEQ expression
-                    			{ }
+                    			{ int print = searchT($1, parId); if(print==-1) printMessage(print, $1); }
 		| BEGINN statement stateList END
 		| IF condition THEN   {  }
                    statement       {  }
@@ -108,7 +108,7 @@ factList	: /* empty */
 		| factList '/' factor 	{  }
 		;
 
-factor		: IDENT	{ }
+factor		: IDENT	{ printMessage(searchT($1, parId), $1); }
 		| NUMBER 	{ }
 
 		| IDENT '(' expList ')'	{ }

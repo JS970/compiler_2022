@@ -1255,7 +1255,7 @@ yyreduce:
 
   case 22: /* $@4: %empty  */
 #line 62 "hw.y"
-                                        { enterTfunc((yyvsp[0].name), DEFAULT ); blockBegin(FIRSTADDR); }
+                                        { set_areaNumber2(); enterTfunc((yyvsp[0].name), DEFAULT ); blockBegin(FIRSTADDR); }
 #line 1260 "hw.tab.c"
     break;
 
@@ -1265,158 +1265,164 @@ yyreduce:
 #line 1266 "hw.tab.c"
     break;
 
+  case 24: /* funcDecl: FUNCTION IDENT $@4 '(' optParList ')' $@5 block ';'  */
+#line 64 "hw.y"
+                                        { set_areaNumber1(); }
+#line 1272 "hw.tab.c"
+    break;
+
   case 26: /* statement: IDENT COLOEQ expression  */
 #line 69 "hw.y"
-                                        { }
-#line 1272 "hw.tab.c"
+                                        { int print = searchT((yyvsp[-2].name), parId); if(print==-1) printMessage(print, (yyvsp[-2].name)); }
+#line 1278 "hw.tab.c"
     break;
 
   case 28: /* $@6: %empty  */
 #line 71 "hw.y"
                                       {  }
-#line 1278 "hw.tab.c"
+#line 1284 "hw.tab.c"
     break;
 
   case 29: /* statement: IF condition THEN $@6 statement  */
 #line 72 "hw.y"
                                    {  }
-#line 1284 "hw.tab.c"
+#line 1290 "hw.tab.c"
     break;
 
   case 30: /* $@7: %empty  */
 #line 73 "hw.y"
                                 { }
-#line 1290 "hw.tab.c"
+#line 1296 "hw.tab.c"
     break;
 
   case 31: /* $@8: %empty  */
 #line 74 "hw.y"
                                 { }
-#line 1296 "hw.tab.c"
+#line 1302 "hw.tab.c"
     break;
 
   case 32: /* statement: WHILE $@7 condition DO $@8 statement  */
 #line 75 "hw.y"
                                 { 			}
-#line 1302 "hw.tab.c"
+#line 1308 "hw.tab.c"
     break;
 
   case 33: /* statement: RETURN expression  */
 #line 76 "hw.y"
                                         {  }
-#line 1308 "hw.tab.c"
+#line 1314 "hw.tab.c"
     break;
 
   case 34: /* statement: WRITE expression  */
 #line 77 "hw.y"
                                         {  }
-#line 1314 "hw.tab.c"
+#line 1320 "hw.tab.c"
     break;
 
   case 35: /* statement: WRITELN  */
 #line 78 "hw.y"
                                         {  }
-#line 1320 "hw.tab.c"
+#line 1326 "hw.tab.c"
     break;
 
   case 38: /* condition: ODD expression  */
 #line 85 "hw.y"
                                                         { }
-#line 1326 "hw.tab.c"
+#line 1332 "hw.tab.c"
     break;
 
   case 39: /* condition: expression EQ expression  */
 #line 86 "hw.y"
                                                         { }
-#line 1332 "hw.tab.c"
+#line 1338 "hw.tab.c"
     break;
 
   case 40: /* condition: expression NOTEQ expression  */
 #line 87 "hw.y"
                                                 { }
-#line 1338 "hw.tab.c"
+#line 1344 "hw.tab.c"
     break;
 
   case 41: /* condition: expression LT expression  */
 #line 88 "hw.y"
                                                         { }
-#line 1344 "hw.tab.c"
+#line 1350 "hw.tab.c"
     break;
 
   case 42: /* condition: expression GT expression  */
 #line 89 "hw.y"
                                                         { }
-#line 1350 "hw.tab.c"
+#line 1356 "hw.tab.c"
     break;
 
   case 43: /* condition: expression LE expression  */
 #line 90 "hw.y"
                                                         { }
-#line 1356 "hw.tab.c"
+#line 1362 "hw.tab.c"
     break;
 
   case 44: /* condition: expression GE expression  */
 #line 91 "hw.y"
                                                         { }
-#line 1362 "hw.tab.c"
+#line 1368 "hw.tab.c"
     break;
 
   case 45: /* $@9: %empty  */
 #line 94 "hw.y"
                                 { }
-#line 1368 "hw.tab.c"
+#line 1374 "hw.tab.c"
     break;
 
   case 49: /* termList: termList '+' term  */
 #line 100 "hw.y"
                                         { }
-#line 1374 "hw.tab.c"
+#line 1380 "hw.tab.c"
     break;
 
   case 50: /* termList: termList '-' term  */
 #line 101 "hw.y"
                                         { }
-#line 1380 "hw.tab.c"
+#line 1386 "hw.tab.c"
     break;
 
   case 53: /* factList: factList '*' factor  */
 #line 107 "hw.y"
                                         {  }
-#line 1386 "hw.tab.c"
+#line 1392 "hw.tab.c"
     break;
 
   case 54: /* factList: factList '/' factor  */
 #line 108 "hw.y"
                                         {  }
-#line 1392 "hw.tab.c"
+#line 1398 "hw.tab.c"
     break;
 
   case 55: /* factor: IDENT  */
 #line 111 "hw.y"
-                        { }
-#line 1398 "hw.tab.c"
+                        { printMessage(searchT((yyvsp[0].name), parId), (yyvsp[0].name)); }
+#line 1404 "hw.tab.c"
     break;
 
   case 56: /* factor: NUMBER  */
 #line 112 "hw.y"
                                 { }
-#line 1404 "hw.tab.c"
+#line 1410 "hw.tab.c"
     break;
 
   case 57: /* factor: IDENT '(' expList ')'  */
 #line 114 "hw.y"
                                         { }
-#line 1410 "hw.tab.c"
+#line 1416 "hw.tab.c"
     break;
 
   case 63: /* COMMA: %empty  */
 #line 124 "hw.y"
                                 { warning("warning: missing comma\n");}
-#line 1416 "hw.tab.c"
+#line 1422 "hw.tab.c"
     break;
 
 
-#line 1420 "hw.tab.c"
+#line 1426 "hw.tab.c"
 
       default: break;
     }

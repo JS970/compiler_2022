@@ -15,3 +15,6 @@ int enterTconst(char *id, int v);
 int searchT(char *id, KindT k);	
 KindT kindT(int i);			
 void printTable();
+void set_areaNumber1();
+void set_areaNumber2();
+void printMessage(int flag, char *id);

@@ -29,6 +29,18 @@ int prevlocalvarAddr;
 int prevlocalfuncAddr;
 int countedparIndex;
 int parstartIndex;
+int areaNumber;
+KindT currentKind;
+
+void set_areaNumber1()
+{
+	areaNumber = tIndex;
+}
+
+void set_areaNumber2()
+{
+	areaNumber++;
+}
 
 void increase_pars()
 {
@@ -105,8 +117,72 @@ int enterTconst(char *id, int v)
 	return tIndex++;
 }
 
+void printMessage(int flag, char*id)
+{
+	if(flag == -1)
+	{
+		printf("undef\n");
+		printf("Can't find symbol (%s, var) in the table\n", id);
+	}
+	
+	else
+	{
+		switch(currentKind)
+		{
+			case varId:
+				printf("Index : %d\t kind : var\t Id:%s\n", flag, symbolTable[flag].name);
+				break;
+			case parId:
+				printf("Index : %d\t kind : par\t Id:%s\n", flag, symbolTable[flag].name);
+				break;
+			case constId:
+				printf("Index : %d\t kind : const\t Id:%s\n", flag, symbolTable[flag].name);
+				break;
+		}
+	}
+}
+
 int searchT(char *id, KindT k)		
 {
+	int idx = -1;
+	k = parId;
+	for(int i = areaNumber; i < MAXTABLE; i++)
+	{
+		if(!strcmp(symbolTable[i].name, id) && symbolTable[i].type == k)
+		{
+			idx = i;
+			break;
+		}
+	}
+	if(idx == -1)
+	{
+		k = varId;
+		for(int i = areaNumber; i < MAXTABLE; i++)
+		{
+			if(!strcmp(symbolTable[i].name, id))
+			{
+				if(symbolTable[i].type == k)
+				{   
+					idx = i;
+					break;
+				}
+			}
+		}
+	}
+	if(idx == -1)
+	{
+		k = constId;
+		for(int i = areaNumber; i < MAXTABLE; i++)
+		{
+			if(!strcmp(symbolTable[i].name, id) && symbolTable[i].type == k)
+			{
+				idx = i;
+				break;
+			}
+		}
+	}	
+	currentKind = k;
+	return idx;
 }
 
 void printTable() 
