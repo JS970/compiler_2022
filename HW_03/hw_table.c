@@ -1,4 +1,5 @@
 #include "hw_table.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -138,6 +139,9 @@ void printMessage(int flag, char*id)
 			case constId:
 				printf("Index : %d\t kind : const\t Id:%s\n", flag, symbolTable[flag].name);
 				break;
+			case funcId:
+				break;
+
 		}
 	}
 }
