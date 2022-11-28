@@ -6,28 +6,61 @@
 #define MAXREG 20	
 #define MAXLEVEL 5
 
+typedef struct inst
+{
+	OpCode opCode;
+	union
+	{
+		RelAddr addr;
+		int value;
+		Operator optr;
+	}u;
+}Inst;
+
+static Inst code[MAXCODE];
+static int cIndex = -1;
 
 static void checkMax();
 static void printCode(int i);
 
 int nextCode()				
 {
+	return cIndex + 1;
 }
 
 int genCodeV(OpCode op, int v)
 {
+	checkMax();
+	code[cIndex].opCode = op;
+	code[cIndex].u.value = v;
+	return cIndex;
 }
 
 int genCodeT(OpCode op, int ti)	
 {
+	checkMax();
+	code[cIndex].opCode = op;
+	code[cIndex].u.addr = relAddr(ti);
+	return cIndex;
 }
 
 int genCodeO(Operator p)	
 {
+	checkMax();
+	code[cIndex].opCode = opr;
+	code[cIndex].u.optr = p;
+	return cIndex;
 }
 
 int genCodeR()			
 {
+	if(code[cIndex].opCode == ret)
+		return cIndex;
+	checkMax();
+	code[cIndex].opCode = ret;
+	code[cIndex].u.addr.level = bLevel();
+	code[cIndex].u.addr.addr = fPars();
+	return cIndex;
 }
 
 void checkMax()	
@@ -39,6 +72,7 @@ void checkMax()
 	
 void backPatch(int i)	
 {
+	code[i].u.value = cIndex + 1;
 }
 
 void listCode()		
