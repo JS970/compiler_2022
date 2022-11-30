@@ -93,11 +93,11 @@ void printCode(int i)
 	case opr: printf("opr"); flag=3; break;
 	case lod: printf("lod"); flag=2; break;
 	case sto: printf("sto"); flag=2; break;
-//	case cal: printf("cal"); flag=2; break;
+	case cal: printf("cal"); flag=2; break;
 	case ret: printf("ret"); flag=2; break;
 	case ict: printf("ict"); flag=1; break;
 	case jmp: printf("jmp"); flag=1; break;
-//	case jpc: printf("jpc"); flag=1; break;
+	case jpc: printf("jpc"); flag=1; break;
 	}
 	switch(flag){
 	case 1:
@@ -109,18 +109,18 @@ void printCode(int i)
 		return;
 	case 3:
 		switch(code[i].u.optr){
-//		case neg: printf(",neg\n"); return;
-//		case add: printf(",add\n"); return;
-//		case sub: printf(",sub\n"); return;
-//		case mul: printf(",mul\n"); return;
-//		case div: printf(",div\n"); return;
-//		case odd: printf(",odd\n"); return;
-//		case eq: printf(",eq\n"); return;
-//		case ls: printf(",ls\n"); return;
-//		case gr: printf(",gr\n"); return;
-//		case neq: printf(",neq\n"); return;
-//		case lseq: printf(",lseq\n"); return;
-//		case greq: printf(",greq\n"); return;
+		case neg: printf(",neg\n"); return;
+		case add: printf(",add\n"); return;
+		case sub: printf(",sub\n"); return;
+		case mul: printf(",mul\n"); return;
+		case div: printf(",div\n"); return;
+		case odd: printf(",odd\n"); return;
+		case eq: printf(",eq\n"); return;
+		case ls: printf(",ls\n"); return;
+		case gr: printf(",gr\n"); return;
+		case neq: printf(",neq\n"); return;
+		case lseq: printf(",lseq\n"); return;
+		case greq: printf(",greq\n"); return;
 		case wrt: printf(",wrt\n"); return;
 		case wrl: printf(",wrl\n"); return;
 		}
@@ -146,11 +146,11 @@ void execute()
 				 break;
 		case sto: stack[display[i.u.addr.level] + i.u.addr.addr] = stack[--top]; 
 				 break;
-/*		case cal: lev = i.u.addr.level +1;	
+		case cal: lev = i.u.addr.level +1;	
 				stack[top] = display[lev]; 
 				stack[top+1] = pc; display[lev] = top; 
 				pc = i.u.addr.addr;
-				 break; */
+				 break; 
 		case ret: temp = stack[--top];	
 				top = display[i.u.addr.level]; 
 				display[i.u.addr.level] = stack[top];
@@ -163,24 +163,24 @@ void execute()
 					yyerror("stack overflow");
 				break;
 		case jmp: pc = i.u.value; break;
-/*		case jpc: if (stack[--top] == 0)
+		case jpc: if (stack[--top] == 0)
 					pc = i.u.value;
 				break;
-*/
+
 		case opr: 
 			switch(i.u.optr){
-//			case neg: stack[top-1] = -stack[top-1]; continue;
-//  		case add: --top;  stack[top-1] += stack[top]; continue;
-//			case sub: --top; stack[top-1] -= stack[top]; continue;
-//			case mul: --top;  stack[top-1] *= stack[top];  continue;
-//			case div: --top;  stack[top-1] /= stack[top]; continue;
-//			case odd: stack[top-1] = stack[top-1] & 1; continue;
-//			case eq: --top;  stack[top-1] = (stack[top-1] == stack[top]); continue;
-//			case ls: --top;  stack[top-1] = (stack[top-1] < stack[top]); continue;
-//			case gr: --top;  stack[top-1] = (stack[top-1] > stack[top]); continue;
-//			case neq: --top;  stack[top-1] = (stack[top-1] != stack[top]); continue;
-//			case lseq: --top;  stack[top-1] = (stack[top-1] <= stack[top]); continue;
-//			case greq: --top;  stack[top-1] = (stack[top-1] >= stack[top]); continue;
+			case neg: stack[top-1] = -stack[top-1]; continue;
+  		case add: --top;  stack[top-1] += stack[top]; continue;
+			case sub: --top; stack[top-1] -= stack[top]; continue;
+			case mul: --top;  stack[top-1] *= stack[top];  continue;
+			case div: --top;  stack[top-1] /= stack[top]; continue;
+			case odd: stack[top-1] = stack[top-1] & 1; continue;
+			case eq: --top;  stack[top-1] = (stack[top-1] == stack[top]); continue;
+			case ls: --top;  stack[top-1] = (stack[top-1] < stack[top]); continue;
+			case gr: --top;  stack[top-1] = (stack[top-1] > stack[top]); continue;
+			case neq: --top;  stack[top-1] = (stack[top-1] != stack[top]); continue;
+			case lseq: --top;  stack[top-1] = (stack[top-1] <= stack[top]); continue;
+			case greq: --top;  stack[top-1] = (stack[top-1] >= stack[top]); continue;
 			case wrt: printf("%d ", stack[--top]); continue;
 			case wrl: printf("\n"); continue;
 			}

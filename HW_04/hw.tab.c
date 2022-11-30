@@ -146,7 +146,7 @@ enum yysymbol_kind_t
   YYSYMBOL_50_5 = 50,                      /* $@5  */
   YYSYMBOL_statement = 51,                 /* statement  */
   YYSYMBOL_52_6 = 52,                      /* $@6  */
-  YYSYMBOL_53_7 = 53,                      /* $@7  */
+  YYSYMBOL_53_7 = 53,                      /* @7  */
   YYSYMBOL_54_8 = 54,                      /* $@8  */
   YYSYMBOL_stateList = 55,                 /* stateList  */
   YYSYMBOL_condition = 56,                 /* condition  */
@@ -560,8 +560,8 @@ static const yytype_uint8 yyrline[] =
       58,    59,    62,    63,    62,    67,    68,    70,    71,    71,
       73,    74,    73,    76,    77,    78,    81,    82,    85,    86,
       87,    88,    89,    90,    91,    94,    94,    96,    99,   100,
-     101,   104,   106,   107,   108,   111,   120,   122,   123,   126,
-     127,   128,   131,   132
+     101,   104,   106,   107,   108,   111,   124,   126,   127,   130,
+     131,   132,   135,   136
 };
 #endif
 
@@ -584,7 +584,7 @@ static const char *const yytname[] =
   "'/'", "','", "$accept", "program", "$@1", "block", "@2", "$@3",
   "declList", "decl", "constDecl", "numberList", "varDecl", "identList",
   "optParList", "parList", "funcDecl", "$@4", "$@5", "statement", "$@6",
-  "$@7", "$@8", "stateList", "condition", "expression", "$@9", "termList",
+  "@7", "$@8", "stateList", "condition", "expression", "$@9", "termList",
   "term", "factList", "factor", "expList", "COMMA", YY_NULLPTR
 };
 
@@ -1273,31 +1273,31 @@ yyreduce:
 
   case 28: /* $@6: %empty  */
 #line 71 "hw.y"
-                                      {   }
+                                      { (yyvsp[-2].val) = genCodeV(jpc, 0); }
 #line 1278 "hw.tab.c"
     break;
 
   case 29: /* statement: IF condition THEN $@6 statement  */
 #line 72 "hw.y"
-                                   {  }
+                                   { backPatch((yyvsp[-4].val)); }
 #line 1284 "hw.tab.c"
     break;
 
-  case 30: /* $@7: %empty  */
+  case 30: /* @7: %empty  */
 #line 73 "hw.y"
-                                {  }
+                                { (yyval.val) = nextCode(); }
 #line 1290 "hw.tab.c"
     break;
 
   case 31: /* $@8: %empty  */
 #line 74 "hw.y"
-                                {  }
+                                { (yyvsp[-3].val) = genCodeV(jpc, 0); }
 #line 1296 "hw.tab.c"
     break;
 
-  case 32: /* statement: WHILE $@7 condition DO $@8 statement  */
+  case 32: /* statement: WHILE @7 condition DO $@8 statement  */
 #line 75 "hw.y"
-                                { 		      			 }
+                                { genCodeV(jmp, (yyvsp[-4].val)); backPatch((yyvsp[-5].val)); }
 #line 1302 "hw.tab.c"
     break;
 
@@ -1321,73 +1321,73 @@ yyreduce:
 
   case 38: /* condition: ODD expression  */
 #line 85 "hw.y"
-                                                        { }
+                                                        { genCodeO(odd); }
 #line 1326 "hw.tab.c"
     break;
 
   case 39: /* condition: expression EQ expression  */
 #line 86 "hw.y"
-                                                        { }
+                                                        { genCodeO(eq); }
 #line 1332 "hw.tab.c"
     break;
 
   case 40: /* condition: expression NOTEQ expression  */
 #line 87 "hw.y"
-                                                { }
+                                                { genCodeO(neq); }
 #line 1338 "hw.tab.c"
     break;
 
   case 41: /* condition: expression LT expression  */
 #line 88 "hw.y"
-                                                        { }
+                                                        { genCodeO(ls); }
 #line 1344 "hw.tab.c"
     break;
 
   case 42: /* condition: expression GT expression  */
 #line 89 "hw.y"
-                                                        { }
+                                                        { genCodeO(gr); }
 #line 1350 "hw.tab.c"
     break;
 
   case 43: /* condition: expression LE expression  */
 #line 90 "hw.y"
-                                                        { }
+                                                        { genCodeO(lseq); }
 #line 1356 "hw.tab.c"
     break;
 
   case 44: /* condition: expression GE expression  */
 #line 91 "hw.y"
-                                                        { }
+                                                        { genCodeO(greq); }
 #line 1362 "hw.tab.c"
     break;
 
   case 45: /* $@9: %empty  */
 #line 94 "hw.y"
-                                { }
+                                { genCodeO(neg); }
 #line 1368 "hw.tab.c"
     break;
 
   case 49: /* termList: termList '+' term  */
 #line 100 "hw.y"
-                                        {  }
+                                        { genCodeO(add); }
 #line 1374 "hw.tab.c"
     break;
 
   case 50: /* termList: termList '-' term  */
 #line 101 "hw.y"
-                                        {  }
+                                        { genCodeO(sub); }
 #line 1380 "hw.tab.c"
     break;
 
   case 53: /* factList: factList '*' factor  */
 #line 107 "hw.y"
-                                        {  }
+                                        { genCodeO(mul); }
 #line 1386 "hw.tab.c"
     break;
 
   case 54: /* factList: factList '/' factor  */
 #line 108 "hw.y"
-                                        {  }
+                                        { genCodeO(div); }
 #line 1392 "hw.tab.c"
     break;
 
@@ -1395,36 +1395,40 @@ yyreduce:
 #line 111 "hw.y"
                         { int j, k; j = searchT((yyvsp[0].name), varId); k = kindT(j);
 		    			switch(k){
-		     			case varId: case parId:
+		     			case varId:
+						 genCodeT(lod, searchT((yyvsp[0].name), varId));
+						 break;
+					case parId:
+						 genCodeT(lod, searchT((yyvsp[0].name), parId));
 		      				 break;
 		     			case constId:
-						genCodeV(lit, val(j));
+						 genCodeV(lit, val(j));
 		      				 break;
 		    			}
 		  		}
-#line 1406 "hw.tab.c"
+#line 1410 "hw.tab.c"
     break;
 
   case 56: /* factor: NUMBER  */
-#line 120 "hw.y"
-                                { }
-#line 1412 "hw.tab.c"
+#line 124 "hw.y"
+                                { genCodeV(lit, (yyvsp[0].val)); }
+#line 1416 "hw.tab.c"
     break;
 
   case 57: /* factor: IDENT '(' expList ')'  */
-#line 122 "hw.y"
+#line 126 "hw.y"
                                         { }
-#line 1418 "hw.tab.c"
+#line 1422 "hw.tab.c"
     break;
 
   case 63: /* COMMA: %empty  */
-#line 132 "hw.y"
+#line 136 "hw.y"
                                 { warning("warning: missing comma\n");}
-#line 1424 "hw.tab.c"
+#line 1428 "hw.tab.c"
     break;
 
 
-#line 1428 "hw.tab.c"
+#line 1432 "hw.tab.c"
 
       default: break;
     }
@@ -1617,7 +1621,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 135 "hw.y"
+#line 139 "hw.y"
 
 
 int noError = 1;

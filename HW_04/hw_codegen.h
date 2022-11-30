@@ -1,11 +1,13 @@
 typedef enum codes
 {
-	lit, opr, lod, sto, ict, ret, jmp
+	lit, opr, lod, sto, ict, ret, jmp,
+	cal, jpc
 }OpCode;
 
 typedef enum ops
 {
-	wrt, wrl
+	wrt, wrl, neg, add, sub, mul, div, odd, eq,
+	ls, gr, neq, lseq, greq
 }Operator;
 int genCodeV(OpCode op, int v);		
 int genCodeT(OpCode op, int ti);

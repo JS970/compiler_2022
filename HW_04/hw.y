@@ -20,7 +20,7 @@
 
 %%
 program	:  			{ blockBegin(FIRSTADDR); } 
-		  block '.'
+		  block '.' 
 		;
 
 block		: 			{ $<val>$ = genCodeV(jmp, 0); }
@@ -68,11 +68,11 @@ statement	: /* empty */
 		| IDENT COLOEQ expression
                     			{ genCodeT(sto, searchT($1, varId)); }
 		| BEGINN statement stateList END
-		| IF condition THEN   {   }
-                   statement       {  }
-		| WHILE		{  }
-		   condition DO	{  }
-                    statement	{ 		      			 }
+		| IF condition THEN   { $<val>1 = genCodeV(jpc, 0); }
+                   statement       { backPatch($<val>1); }
+		| WHILE		{ $<val>$ = nextCode(); }
+		   condition DO	{ $<val>1 = genCodeV(jpc, 0); }
+                    statement	{ genCodeV(jmp, $<val>2); backPatch($<val>1); }
 		| RETURN expression	{ }
 		| WRITE expression	{ genCodeO(wrt); }
 		| WRITELN		{ genCodeO(wrl); }	
@@ -82,42 +82,46 @@ stateList	: /* empty */
 		| stateList ';' statement
 		;
 
-condition	: ODD expression 			{ }
-		| expression EQ expression 		{ }
-		| expression NOTEQ expression 	{ }
-		| expression LT expression 		{ }
-		| expression GT expression 		{ }
-		| expression LE expression 		{ }
-		| expression GE expression 		{ }
+condition	: ODD expression 			{ genCodeO(odd); }
+		| expression EQ expression 		{ genCodeO(eq); }
+		| expression NOTEQ expression 	{ genCodeO(neq); }
+		| expression LT expression 		{ genCodeO(ls); }
+		| expression GT expression 		{ genCodeO(gr); }
+		| expression LE expression 		{ genCodeO(lseq); }
+		| expression GE expression 		{ genCodeO(greq); }
 		;
 
-expression	: '-'  term 	{ }
+expression	: '-'  term 	{ genCodeO(neg); }
 		   termList 
 		| term  termList
 		;
 		
 termList	:  /* empty */
-		| termList '+' term 	{  }
-		| termList '-' term 	{  }
+		| termList '+' term 	{ genCodeO(add); }
+		| termList '-' term 	{ genCodeO(sub); }
 		;
 
 term		: factor factList
 		;
 factList	: /* empty */
-		| factList '*' factor 	{  }
-		| factList '/' factor 	{  }
+		| factList '*' factor 	{ genCodeO(mul); }
+		| factList '/' factor 	{ genCodeO(div); }
 		;
 
 factor		: IDENT	{ int j, k; j = searchT($1, varId); k = kindT(j);
 		    			switch(k){
-		     			case varId: case parId:
+		     			case varId:
+						 genCodeT(lod, searchT($1, varId));
+						 break;
+					case parId:
+						 genCodeT(lod, searchT($1, parId));
 		      				 break;
 		     			case constId:
-						genCodeV(lit, val(j));
+						 genCodeV(lit, val(j));
 		      				 break;
 		    			}
 		  		}
-		| NUMBER 	{ }
+		| NUMBER 	{ genCodeV(lit, $1); }
 
 		| IDENT '(' expList ')'	{ }
 		| '(' expression ')'
